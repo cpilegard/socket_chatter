@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var username;
+	var username = "[anonymous]";
 
 	$('#chat-form').on('submit', function(e) {
 		e.preventDefault();
@@ -18,7 +18,9 @@ $(document).ready(function() {
 			url: '/users',
 			type: 'post',
 			data: { user: username }
-		});
+		}).done(function() {
+			$('#user-form').hide();
+		})
 	});
 
 
@@ -37,5 +39,14 @@ $(document).ready(function() {
 		if (data.message != null) {
 			$('.message_list').append('<p>'+data.message.name+' says: ' +data.message.msg+'</p>');
 		}
+	}
+
+	window.onbeforeunload = function() {
+		$.ajax({
+			url: '/users',
+			type: 'DELETE',
+			data: {user: username}
+		});
+		stream.close();
 	}
 });
