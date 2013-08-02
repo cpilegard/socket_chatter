@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var username = "team socket";
+	var username;
 
 	$('#chat-form').on('submit', function(e) {
 		e.preventDefault();
@@ -7,7 +7,17 @@ $(document).ready(function() {
 			url: '/messages',
 			type: 'post',
 			data: { msg: $('#chat-msg').val(),
-							name: username}
+							name: username }
+		});
+	});
+
+	$('#user-form').on('submit', function(e) {
+		username = $('#user-name').val();
+		e.preventDefault();
+		$.ajax({
+			url: '/users',
+			type: 'post',
+			data: { user: username }
 		});
 	});
 
@@ -20,13 +30,12 @@ $(document).ready(function() {
 			type: 'post',
 			data: { user: username }
 		});
-	};
+	}
 
 	stream.onmessage = function(e) {
 		var data = JSON.parse(e.data);
-		console.log(data);
 		if (data.message != null) {
-			$('.message_list').append('<p>'+data.message.msg+'</p>');
+			$('.message_list').append('<p>'+data.message.name+' says: ' +data.message.msg+'</p>');
 		}
-	};
+	}
 });
