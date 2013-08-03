@@ -9,6 +9,9 @@ $(document).ready(function() {
 			data: { msg: $('#chat-msg').val(),
 							name: username }
 		});
+
+		$("#chat-msg").val("");
+		$("#chat-msg").focus();
 	});
 
 	$('#user-form').on('submit', function(e) {
@@ -20,7 +23,7 @@ $(document).ready(function() {
 			data: { user: username }
 		}).done(function() {
 			$('#user-form').hide();
-		})
+		});
 	});
 
 
@@ -37,7 +40,7 @@ $(document).ready(function() {
 	stream.onmessage = function(e) {
 		var data = JSON.parse(e.data);
 		if (data.message != null) {
-			$('.message_list').append('<p>'+data.message.name+' says: ' +data.message.msg+'</p>');
+			$('.message_list').prepend('<p>'+data.message.name+' says: ' +data.message.msg+'</p>');
 		}
 	}
 
